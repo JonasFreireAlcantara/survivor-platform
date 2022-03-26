@@ -1,7 +1,3 @@
-// using System.Numerics;
-using System.Diagnostics;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -9,16 +5,21 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemy;
     public float enemyHeightSpawn;
     public float spawnTime;
+    public int numberOfEnemiesToBeSpawned = 2;
 
     private void Start()
     {
-        InvokeRepeating("SpawnRandomEnemy", spawnTime, spawnTime);
+        InvokeRepeating("SpawnRandomEnemies", spawnTime, spawnTime);
     }
 
-    private void SpawnRandomEnemy()
+    private void SpawnRandomEnemies()
     {
-        Vector3 spawnPosition = getEnemySpawnRandomPosition();
-        Instantiate(enemy, spawnPosition, Quaternion.identity);
+        UnityEngine.Debug.Log("Number of enemies: " + numberOfEnemiesToBeSpawned);
+        for (int i = 0; i < numberOfEnemiesToBeSpawned; i++)
+        {
+            Vector3 spawnPosition = getEnemySpawnRandomPosition();
+            Instantiate(enemy, spawnPosition, Quaternion.identity);
+        }
     }
 
     private UnityEngine.Vector3 getEnemySpawnRandomPosition()

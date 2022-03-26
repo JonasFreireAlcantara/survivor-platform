@@ -6,7 +6,8 @@ public class PlayerGrounded : MonoBehaviour
 {
     PlayerController Player;
 
-    // Start is called before the first frame update
+    private const string ENEMY_TAG = "Enemy";
+
     void Start()
     {
         Player = gameObject.transform.parent.gameObject.GetComponent<PlayerController>();
@@ -21,19 +22,24 @@ public class PlayerGrounded : MonoBehaviour
 
         if (IsEnemyCollision(collision))
         {
-            GameObject enemyGameObject = collision.gameObject;
-            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
-            enemyController.isBeingDestroyed = true;
-            Destroy(enemyGameObject, 0.6f);
-
+            DestroyEnemy(collision.gameObject);
             Player.Jump();
         }
+    }
+
+    private void DestroyEnemy(GameObject gameObject)
+    {
+        Player.IncreaseScoreByDestroyingEnemy();
+
+        EnemyController enemyController = gameObject.GetComponent<EnemyController>();
+        enemyController.isBeingDestroyed = true;
+        Destroy(gameObject, 0.6f);
     }
 
     private bool IsEnemyCollision(Collision2D collision)
     {
         GameObject other = collision.gameObject;
-        return other.CompareTag("Enemy");
+        return other.CompareTag(ENEMY_TAG) && !Player.isDying;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
